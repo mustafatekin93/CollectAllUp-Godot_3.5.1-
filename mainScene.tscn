@@ -1,0 +1,203 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://sprites/basket.png" type="Texture" id=1]
+[ext_resource path="res://mainScene.gd" type="Script" id=2]
+[ext_resource path="res://PlayerMovement.gd" type="Script" id=3]
+[ext_resource path="res://Font/Hannover Messe Sans.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://explotionParticle.tscn" type="PackedScene" id=5]
+[ext_resource path="res://sprites/background.png" type="Texture" id=6]
+[ext_resource path="res://collectParticle.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Font/PixelFont.tres" type="DynamicFont" id=8]
+[ext_resource path="res://sprites/timerCounterBase.png" type="Texture" id=9]
+[ext_resource path="res://sprites/unmute.png" type="Texture" id=10]
+[ext_resource path="res://sprites/mute.png" type="Texture" id=11]
+[ext_resource path="res://sprites/timerCounterFill.png" type="Texture" id=12]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 16, 4.5 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 22
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 22
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+extra_spacing_char = 1
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 35
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 20
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 4 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 78, 7 )
+
+[node name="mainScene" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+zoom = Vector2( 0.5, 0.5 )
+
+[node name="Background" type="Sprite" parent="Camera2D"]
+z_index = -5
+texture = ExtResource( 6 )
+
+[node name="playerBasket" type="KinematicBody2D" parent="."]
+position = Vector2( 0, 130 )
+moving_platform_apply_velocity_on_leave = 2
+script = ExtResource( 3 )
+expParticle = ExtResource( 5 )
+collectParticle = ExtResource( 7 )
+muteTexture = ExtResource( 11 )
+unmuteTexture = ExtResource( 10 )
+
+[node name="Basket32X16" type="Sprite" parent="playerBasket"]
+texture = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="playerBasket"]
+position = Vector2( 0, 0.5 )
+shape = SubResource( 1 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.75
+autostart = true
+
+[node name="Multiplier" type="Node" parent="."]
+
+[node name="TextureProgress" type="TextureProgress" parent="Multiplier"]
+margin_left = -76.0
+margin_top = -125.0
+margin_right = -44.0
+margin_bottom = -93.0
+rect_scale = Vector2( 0.7, 0.7 )
+max_value = 10.0
+step = 0.1
+texture_under = ExtResource( 9 )
+texture_progress = ExtResource( 12 )
+fill_mode = 5
+
+[node name="Label" type="Label" parent="Multiplier/TextureProgress"]
+margin_left = 5.71428
+margin_top = 5.71426
+margin_right = 31.7143
+margin_bottom = 32.7143
+rect_scale = Vector2( 0.8, 0.8 )
+custom_fonts/font = SubResource( 5 )
+text = "x10"
+align = 1
+valign = 1
+
+[node name="scoreText" type="Label" parent="."]
+margin_left = -76.0
+margin_top = -139.0
+margin_right = 5.0
+margin_bottom = -112.0
+rect_scale = Vector2( 0.6, 0.55 )
+custom_fonts/font = SubResource( 2 )
+text = "SCORE: 10"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="hp1" type="Sprite" parent="."]
+position = Vector2( 17, -117.5 )
+scale = Vector2( 0.6875, 0.6875 )
+texture = ExtResource( 1 )
+
+[node name="hp2" type="Sprite" parent="."]
+show_behind_parent = true
+position = Vector2( 41, -117.5 )
+scale = Vector2( 0.6875, 0.6875 )
+texture = ExtResource( 1 )
+
+[node name="hp3" type="Sprite" parent="."]
+position = Vector2( 65, -117.5 )
+scale = Vector2( 0.6875, 0.6875 )
+texture = ExtResource( 1 )
+
+[node name="muteButton" type="TextureButton" parent="."]
+margin_left = 56.0
+margin_top = -140.0
+margin_right = 88.0
+margin_bottom = -108.0
+rect_scale = Vector2( 0.6, 0.6 )
+texture_normal = ExtResource( 10 )
+texture_pressed = ExtResource( 11 )
+
+[node name="gameOverText" type="Label" parent="."]
+visible = false
+margin_left = -77.0
+margin_top = -74.0
+margin_right = 77.0
+margin_bottom = -32.0
+custom_fonts/font = SubResource( 3 )
+text = "GAME OVER"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="bestScore" type="Label" parent="."]
+visible = false
+margin_left = -77.0
+margin_top = -24.0
+margin_right = 77.0
+margin_bottom = 18.0
+custom_fonts/font = ExtResource( 8 )
+text = "BEST SCORE: 195"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="yourScore" type="Label" parent="."]
+visible = false
+margin_left = -77.0
+margin_top = -1.0
+margin_right = 77.0
+margin_bottom = 41.0
+custom_fonts/font = ExtResource( 8 )
+text = "YOUR SCORE: 195"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="Button" type="Button" parent="."]
+visible = false
+margin_left = -47.0
+margin_top = 55.0
+margin_right = 47.0
+margin_bottom = 86.0
+rect_pivot_offset = Vector2( 0.5, 0.5 )
+custom_fonts/font = SubResource( 4 )
+text = "RESTART"
+
+[node name="MultiplierEnd" type="Area2D" parent="."]
+position = Vector2( 0, 155 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MultiplierEnd"]
+position = Vector2( 0, -2 )
+shape = SubResource( 6 )
+
+[node name="multiplierTimer" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true
+
+[connection signal="scoreChanged" from="playerBasket" to="." method="_on_playerBasket_scoreChanged"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="pressed" from="muteButton" to="playerBasket" method="_on_muteButton_pressed"]
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
+[connection signal="body_entered" from="MultiplierEnd" to="playerBasket" method="_on_MultiplierEnd_body_entered"]
+[connection signal="timeout" from="multiplierTimer" to="playerBasket" method="_on_multiplierTimer_timeout"]
